@@ -4,15 +4,14 @@ import android.os.Build
 import android.app.Activity
 import android.view.View
 import android.animation.ValueAnimator
+import io.flutter.embedding.android.FlutterActivity
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.MethodCall
 
-class FlutterStatusbarcolorPlugin private constructor(private val activity: Activity?)  : MethodCallHandler {
-
+class FlutterStatusbarcolorPlugin : MethodCallHandler,FlutterActivity()  {
 
     override fun onMethodCall(call: MethodCall, result: Result) {
-        if (activity == null) return result.success(null)
 
         when (call.method) {
             "getstatusbarcolor" -> {
