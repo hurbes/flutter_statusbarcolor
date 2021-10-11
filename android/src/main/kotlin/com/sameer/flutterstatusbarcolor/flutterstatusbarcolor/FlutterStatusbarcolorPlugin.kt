@@ -4,27 +4,19 @@ import android.os.Build
 import android.app.Activity
 import android.view.View
 import android.animation.ValueAnimator
-import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.MethodCall
-import io.flutter.plugin.common.PluginRegistry.Registrar
 
-class FlutterStatusbarcolorPlugin private constructor(private val activity: Activity?) : MethodCallHandler {
-    companion object {
-        @JvmStatic
-        fun registerWith(registrar: Registrar): Unit {
-            val channel = MethodChannel(registrar.messenger(), "plugins.sameer.com/statusbar")
-            channel.setMethodCallHandler(FlutterStatusbarcolorPlugin(registrar.activity()))
-        }
-    }
+class FlutterStatusbarcolorPlugin private constructor(private val activity: Activity?)  : MethodCallHandler {
 
-    override fun onMethodCall(call: MethodCall, result: Result): Unit {
+
+    override fun onMethodCall(call: MethodCall, result: Result) {
         if (activity == null) return result.success(null)
 
         when (call.method) {
             "getstatusbarcolor" -> {
-                var statusBarColor: Int = 0
+                var statusBarColor = 0
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     statusBarColor = activity.window.statusBarColor
                 }
@@ -37,7 +29,7 @@ class FlutterStatusbarcolorPlugin private constructor(private val activity: Acti
                     if (animate) {
                         val colorAnim = ValueAnimator.ofArgb(activity.window.statusBarColor, statusBarColor)
                         colorAnim.addUpdateListener { anim -> activity.window.statusBarColor = anim.animatedValue as Int }
-                        colorAnim.setDuration(300)
+                        colorAnim.duration = 300
                         colorAnim.start()
                     } else {
                         activity.window.statusBarColor = statusBarColor
@@ -57,7 +49,7 @@ class FlutterStatusbarcolorPlugin private constructor(private val activity: Acti
                 result.success(null)
             }
             "getnavigationbarcolor" -> {
-                var navigationBarColor: Int = 0
+                var navigationBarColor = 0
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     navigationBarColor = activity.window.navigationBarColor
                 }
@@ -70,7 +62,7 @@ class FlutterStatusbarcolorPlugin private constructor(private val activity: Acti
                     if (animate) {
                         val colorAnim = ValueAnimator.ofArgb(activity.window.navigationBarColor, navigationBarColor)
                         colorAnim.addUpdateListener { anim -> activity.window.navigationBarColor = anim.animatedValue as Int }
-                        colorAnim.setDuration(300)
+                        colorAnim.duration = 300
                         colorAnim.start()
                     } else {
                         activity.window.navigationBarColor = navigationBarColor
