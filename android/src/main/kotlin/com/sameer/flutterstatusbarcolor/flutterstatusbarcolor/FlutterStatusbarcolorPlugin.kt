@@ -1,17 +1,32 @@
 package com.sameer.flutterstatusbarcolor.flutterstatusbarcolor
 
 import android.os.Build
-import android.app.Activity
 import android.view.View
 import android.animation.ValueAnimator
-import io.flutter.embedding.android.FlutterActivity
+import android.app.Activity
+import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.MethodCall
+import io.flutter.plugin.common.PluginRegistry.Registrar
+import io.flutter.plugin.common.MethodChannel
+import io.flutter.plugin.common.BinaryMessenger
 
-class FlutterStatusbarcolorPlugin : MethodCallHandler,FlutterActivity()  {
+
+class FlutterStatusbarcolorPlugin private constructor(private val activity: Activity?)  : MethodCallHandler, FlutterPlugin {
+
+    private var methodChannel: MethodChannel? = null
+    private lateinit var instance: FlutterStatusbarcolorPlugin
+
+    /** Plugin registration. */
+    @SuppressWarnings("deprecation")
+    fun registerWith(registrar: Registrar) {
+        val instance = FlutterStatusbarcolorPlugin(registrar.activity())
+        instance.onAttachedToEngine(registrar.messenger())
+    }
 
     override fun onMethodCall(call: MethodCall, result: Result) {
+        if (activity == null) return result.success(null)
 
         when (call.method) {
             "getstatusbarcolor" -> {
@@ -82,5 +97,18 @@ class FlutterStatusbarcolorPlugin : MethodCallHandler,FlutterActivity()  {
             }
             else -> result.notImplemented()
         }
+    }
+
+    override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        onAttachedToEngine(binding.binaryMessenger)
+    }
+
+    override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        methodChannel = null
+    }
+
+    private fun onAttachedToEngine(messenger: BinaryMessenger) {
+        methodChannel = MethodChannel(messenger, "plugins.sameer.com/statusbar")
+        methodChannel!!.setMethodCallHandler(instance)
     }
 }
