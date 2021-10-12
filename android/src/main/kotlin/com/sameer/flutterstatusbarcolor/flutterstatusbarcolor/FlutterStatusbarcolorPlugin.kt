@@ -17,7 +17,7 @@ import io.flutter.plugin.common.BinaryMessenger
 class FlutterStatusbarcolorPlugin : MethodCallHandler, FlutterPlugin,
     ActivityAware {
 
-    private  var activity: Activity? =null;
+    private  var activity: Activity? =null
     private var methodChannel: MethodChannel? = null
 
     override fun onMethodCall(call: MethodCall, result: Result) {
