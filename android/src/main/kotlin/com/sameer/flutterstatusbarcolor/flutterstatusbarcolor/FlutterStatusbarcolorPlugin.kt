@@ -108,7 +108,7 @@ class FlutterStatusbarcolorPlugin : MethodCallHandler, FlutterPlugin, ActivityAw
     }
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-      activity = binding.activity
+        activity = binding.activity
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
