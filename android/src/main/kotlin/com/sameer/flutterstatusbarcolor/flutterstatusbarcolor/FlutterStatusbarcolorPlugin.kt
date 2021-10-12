@@ -94,29 +94,25 @@ class FlutterStatusbarcolorPlugin : MethodCallHandler, FlutterPlugin, ActivityAw
     }
 
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-        onAttachedToEngine(binding.binaryMessenger)
+        methodChannel = MethodChannel(binding.binaryMessenger, "plugins.sameer.com/statusbar")
+        methodChannel!!.setMethodCallHandler(this)
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-        methodChannel = null
-    }
-
-    private fun onAttachedToEngine(messenger: BinaryMessenger) {
-        methodChannel = MethodChannel(messenger, "plugins.sameer.com/statusbar")
-        methodChannel!!.setMethodCallHandler(this)
-        this.onAttachedToEngine(messenger)
+        methodChannel?.setMethodCallHandler(null);
+        methodChannel = null;
     }
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-        activity = binding.activity
+       activity=binding.activity
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
-        activity = null
+        onDetachedFromActivity()
     }
 
     override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
-        activity = binding.activity
+       onAttachedToActivity(binding)
     }
 
     override fun onDetachedFromActivity() {
